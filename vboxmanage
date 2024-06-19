@@ -29,7 +29,7 @@ startvm()
 
 stopvm()
 {
-  VBoxManage.exe controlvm $VM savestate
+  VBoxManage.exe controlvm $VM poweroff
 }
 
 ip()
