@@ -1,0 +1,61 @@
+#!/bin/bash
+
+export PATH=$PATH:/mnt/c/Program\ Files/Oracle/VirtualBox/
+VM=$2
+
+help()
+{
+  echo -e "#> $(basename $0) start|stop VM"
+  echo -e "#> $(basename $0) list"
+}
+list()
+{
+  echo -e "\nRegistered VMs"
+  VBoxManage.exe list vms | sed "s/\"//g;s/}//g;s/{//g" | awk '{ printf "%-15sUUID %s\n", $1, $2 }'
+}
+
+listrunning()
+{
+  echo -e "\nRunning VMs"
+  VBoxManage.exe list runningvms | sed "s/\"//g;s/}//g;s/{//g" | awk '{ printf "%-15sUUID %s\n", $1, $2 }'
+  ##for VM in $(VBoxManage.exe list runningvms | awk -F\{ '{print $2}' | sed -e 's/}//g');
+  ##do {
+  ##  VMNAME="$(VBoxManage.exe showvminfo ${VM} --machinereadable | awk -F\= '/^name/{print $2}')"
+  ##  VMIP=$(VBoxManage.exe guestproperty get ${VM} "/VirtualBox/GuestInfo/Net/0/V4/IP" | sed -e 's/Value: //g')
+  ##  printf "VM-IP: %-16s VM-Name: %-50s\n" "${VMIP}" "${VMNAME}"
+  ##} done
+##  VBoxManage.exe guestproperty get centos8 "/VirtualBox/GuestInfo/Net/0/V4/IP"
+}
+
+startvm()
+{
+  VBoxManage.exe startvm $VM --type headless
+}
+
+stopvm()
+{
+  VBoxManage.exe controlvm $VM savestate
+}
+
+ip()
+{
+  VBoxManage.exe guestproperty get $VM "/VirtualBox/GuestInfo/Net/0/V4/IP" # | sed -e 's/Value: //g'
+}  
+case $1 in
+  list)
+    list
+    listrunning
+  ;;
+  start)
+    startvm
+  ;;
+  stop)
+    stopvm
+  ;;
+  ip)
+    ip
+  ;;  
+  *)
+    help
+  ;;
+esac
