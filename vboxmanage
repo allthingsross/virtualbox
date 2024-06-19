@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Simple shell script to list, stop and start VirtualBox guests from a Windows hosts via WSL.
+# Simple shell script to list, stop and start VirtualBox guests from a Windows hosts via WSL .
 
 export PATH=$PATH:/mnt/c/Program\ Files/Oracle/VirtualBox/
 VM=$2
